@@ -125,17 +125,8 @@ async def test_check_category_by_name_when_does_not_exists(mocker):
         await categories_services.check_category_by_name('Category_name')
 
     assert exc_info.value.status_code == 404
-    assert exc_info.value.detail == 'There is no category with such ID'
+    assert exc_info.value.detail == 'There is no category with such Name'
 
-
-@pytest.mark.asyncio
-async def test_check_category_by_name_when_does_not_exists(mocker):
-    mocker.patch('services.categories_services.read_query', mocker.MagicMock(return_value=[]))
-    with pytest.raises(HTTPException) as exc_info:
-        await categories_services.check_category_by_name('Name')
-
-    assert exc_info.value.status_code == 404
-    assert exc_info.value.detail == 'There is no category with such ID'
 
 
 @pytest.mark.asyncio
