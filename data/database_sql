@@ -1,0 +1,245 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema apidb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema apidb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `apidb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `apidb` ;
+
+-- -----------------------------------------------------
+-- Table `apidb`.`category`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`category` (
+  `category_id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(45) NOT NULL,
+  `is_open` TINYINT NOT NULL DEFAULT '1',
+  PRIMARY KEY (`category_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 30
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`users` (
+  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(200) NOT NULL,
+  `firstname` VARCHAR(45) NOT NULL,
+  `lastname` VARCHAR(45) NOT NULL,
+  `role` VARCHAR(10) NOT NULL DEFAULT 'user',
+  `email` VARCHAR(45) NOT NULL,
+  `birth_date` DATE NOT NULL,
+  `is_banned` TINYINT NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 42
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`category_access`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`category_access` (
+  `user_id` INT NOT NULL,
+  `category_id` INT NOT NULL,
+  `access_control` SMALLINT NOT NULL,
+  PRIMARY KEY (`user_id`, `category_id`),
+  INDEX `fk_users_has_category_category2_idx` (`category_id` ASC) VISIBLE,
+  INDEX `fk_users_has_category_users2_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_users_has_category_category2`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `apidb`.`category` (`category_id`),
+  CONSTRAINT `fk_users_has_category_users2`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `apidb`.`users` (`user_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`conversation`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`conversation` (
+  `conversation_id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`conversation_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 30
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`full_access`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`full_access` (
+  `has_access` SMALLINT NOT NULL,
+  `users_id` INT NOT NULL,
+  PRIMARY KEY (`has_access`, `users_id`),
+  INDEX `fk_full_access_users1_idx` (`users_id` ASC) VISIBLE,
+  CONSTRAINT `fk_full_access_users1`
+    FOREIGN KEY (`users_id`)
+    REFERENCES `apidb`.`users` (`user_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`group_member`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`group_member` (
+  `user_id` INT NOT NULL,
+  `conversation_Id` INT NOT NULL,
+  PRIMARY KEY (`user_id`, `conversation_Id`),
+  INDEX `fk_group_member_message_group1_idx` (`conversation_Id` ASC) VISIBLE,
+  CONSTRAINT `fk_group_member_message_group1`
+    FOREIGN KEY (`conversation_Id`)
+    REFERENCES `apidb`.`conversation` (`conversation_id`),
+  CONSTRAINT `fk_group_member_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `apidb`.`users` (`user_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`likes_dislikes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`likes_dislikes` (
+  `user_id` INT NOT NULL,
+  `reply_id` INT NULL DEFAULT NULL,
+  `type` VARCHAR(45) NOT NULL,
+  INDEX `reply_id_idx` (`reply_id` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`message`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`message` (
+  `message_Id` INT NOT NULL AUTO_INCREMENT,
+  `sender` INT NOT NULL,
+  `text` TEXT NOT NULL,
+  `sent_time` DATETIME NOT NULL,
+  `conversation_id` INT NOT NULL,
+  PRIMARY KEY (`message_Id`, `conversation_id`),
+  INDEX `fk_message_message_group1_idx` (`conversation_id` ASC) VISIBLE,
+  CONSTRAINT `fk_message_message_group1`
+    FOREIGN KEY (`conversation_id`)
+    REFERENCES `apidb`.`conversation` (`conversation_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 21
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`read_only`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`read_only` (
+  `users_user_id` INT NOT NULL,
+  PRIMARY KEY (`users_user_id`),
+  CONSTRAINT `fk_read_only_users1`
+    FOREIGN KEY (`users_user_id`)
+    REFERENCES `apidb`.`users` (`user_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`topic`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`topic` (
+  `topic_id` INT NOT NULL AUTO_INCREMENT,
+  `category_id` INT NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `users_id` INT NOT NULL,
+  `is_open` TINYINT NOT NULL DEFAULT '1',
+  `best_reply` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`topic_id`, `category_id`, `users_id`),
+  INDEX `fk_topic_category_idx` (`category_id` ASC) VISIBLE,
+  INDEX `fk_topic_users1_idx` (`users_id` ASC) VISIBLE,
+  CONSTRAINT `fk_topic_category`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `apidb`.`category` (`category_id`),
+  CONSTRAINT `fk_topic_user_id`
+    FOREIGN KEY (`users_id`)
+    REFERENCES `apidb`.`users` (`user_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 65
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`replies`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`replies` (
+  `reply_id` INT NOT NULL AUTO_INCREMENT,
+  `date_posted` DATETIME NOT NULL,
+  `content` MEDIUMTEXT NOT NULL,
+  `likes` INT NOT NULL,
+  `dislikes` INT NOT NULL,
+  `users_id` INT NOT NULL,
+  `topic_id` INT NOT NULL,
+  PRIMARY KEY (`reply_id`, `users_id`, `topic_id`),
+  INDEX `fk_Replies_users1_idx` (`users_id` ASC) VISIBLE,
+  INDEX `fk_Replies_topic1_idx` (`topic_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Replies_topic1`
+    FOREIGN KEY (`topic_id`)
+    REFERENCES `apidb`.`topic` (`topic_id`),
+  CONSTRAINT `fk_Replies_users1`
+    FOREIGN KEY (`users_id`)
+    REFERENCES `apidb`.`users` (`user_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 28
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apidb`.`votes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apidb`.`votes` (
+  `user_id` INT NOT NULL,
+  `reply_id` INT NOT NULL,
+  `vote_type` TINYINT NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`, `reply_id`),
+  INDEX `fk_users_has_replies_replies1_idx` (`reply_id` ASC) VISIBLE,
+  INDEX `fk_users_has_replies_users1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_users_has_replies_replies1`
+    FOREIGN KEY (`reply_id`)
+    REFERENCES `apidb`.`replies` (`reply_id`),
+  CONSTRAINT `fk_users_has_replies_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `apidb`.`users` (`user_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
