@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Actions</title>
+</head>
+<body>
+  <h1>Owner Actions</h1>
+  <input type="number" id="promoteUserIdInput" placeholder="Enter User ID to Promote"><br><br>
+  <button onclick="promoteUser()">Promote User to Admin</button><br><br>
+  <input type="number" id="demoteUserIdInput" placeholder="Enter Admin ID to Demote"><br><br>
+  <button onclick="demoteAdmin()">Demote Admin to User</button><br><br>
+  <input type="number" id="deleteAdminIdInput" placeholder="Enter Admin ID to Delete"><br><br>
+  <button onclick="deleteAdmin()">Delete Admin Account</button><br><br>
+
+  <script>
+    function sendRequest(url) {
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data); // Log response data
+          alert('Action completed successfully!');
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+          alert('Failed to perform action. Please try again.');
+        });
+    }
+
+    function promoteUser() {
+      var userId = document.getElementById('promoteUserIdInput').value;
+      sendRequest(`/owner/promote/${userId}`);
+    }
+
+    function demoteAdmin() {
+      var adminId = document.getElementById('demoteUserIdInput').value;
+      sendRequest(`/owner/demote/${adminId}`);
+    }
+
+    function deleteAdmin() {
+      var adminId = document.getElementById('deleteAdminIdInput').value;
+      fetch(`/owner/${adminId}`, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          alert(`Admin account with ID ${adminId} successfully deleted`);
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+          alert('Failed to delete admin account. Please try again.');
+        });
+    }
+  </script>
+</body>
+</html>

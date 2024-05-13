@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum Website</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    /* Add custom styles here */
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Forum</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Admin Panel</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-lg-8">
+        <h2>Forum Posts</h2>
+        <!-- Forum posts will go here -->
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Post Title</h5>
+            <p class="card-text">Post content goes here...</p>
+          </div>
+          <div class="card-footer text-muted">
+            Posted by Username on Date
+          </div>
+        </div>
+        <!-- Additional forum posts can be added similarly -->
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <h2>Forum Sidebar</h2>
+        <!-- Sidebar content goes here -->
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Sidebar Item</h5>
+            <p class="card-text">Sidebar content goes here...</p>
+          </div>
+        </div>
+        <!-- Additional sidebar items can be added similarly -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

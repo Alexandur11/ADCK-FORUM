@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Actions</title>
+</head>
+<body>
+  <h1>Admin Actions</h1>
+  <button onclick="getAllUsers()">Get All Users</button><br><br>
+  <input type="number" id="userIdInput" placeholder="Enter User ID"><br><br>
+  <button onclick="searchUserById()">Search User by ID</button><br><br>
+  <input type="text" id="usernameInput" placeholder="Enter Username"><br><br>
+  <button onclick="searchUserByUsername()">Search User by Username</button><br><br>
+  <button onclick="isUserLogged()">Check If User Logged</button><br><br>
+  <button onclick="getAllLoggedUsers()">Get All Logged Users</button><br><br>
+  <input type="number" id="deleteUserIdInput" placeholder="Enter User ID to Delete"><br><br>
+  <button onclick="deleteUser()">Delete User</button><br><br>
+  <input type="number" id="lockTopicIdInput" placeholder="Enter Topic ID to Lock"><br><br>
+  <button onclick="lockTopic()">Lock Topic</button><br><br>
+  <input type="number" id="unlockTopicIdInput" placeholder="Enter Topic ID to Unlock"><br><br>
+  <button onclick="unlockTopic()">Unlock Topic</button><br><br>
+  <input type="number" id="lockCategoryIdInput" placeholder="Enter Category ID to Lock"><br><br>
+  <button onclick="lockCategory()">Lock Category</button><br><br>
+  <input type="number" id="unlockCategoryIdInput" placeholder="Enter Category ID to Unlock"><br><br>
+  <button onclick="unlockCategory()">Unlock Category</button><br><br>
+  <input type="number" id="banUserIdInput" placeholder="Enter User ID to Ban"><br><br>
+  <button onclick="banUser()">Ban User</button><br><br>
+  <input type="number" id="writeUserIdInput" placeholder="Enter User ID for Write Access"><br><br>
+  <button onclick="giveWriteAccess()">Give Write Access</button><br><br>
+  <input type="number" id="readUserIdInput" placeholder="Enter User ID for Read Access"><br><br>
+  <button onclick="giveReadAccess()">Give Read Access</button><br><br>
+  <input type="number" id="revokeUserIdInput" placeholder="Enter User ID for Revoking Access"><br><br>
+  <button onclick="revokeAccess()">Revoke Access</button><br><br>
+  <input type="number" id="categoryMembersIdInput" placeholder="Enter Category ID"><br><br>
+  <button onclick="viewCategoryMembers()">View Category Members</button><br><br>
+
+  <script>
+    function sendRequest(url) {
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data); // Log response data
+          alert('Action completed successfully!');
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+          alert('Failed to perform action. Please try again.');
+        });
+    }
+
+    function getAllUsers() {
+      sendRequest('/admin/users/all');
+    }
+
+    function searchUserById() {
+      var userId = document.getElementById('userIdInput').value;
+      sendRequest(`/admin/users/idsearch/${userId}`);
+    }
+
+    function searchUserByUsername() {
+      var username = document.getElementById('usernameInput').value;
+      sendRequest(`/admin/users/search/${username}`);
+    }
+
+    // Add functions for other actions similarly
+  </script>
+</body>
+</html>

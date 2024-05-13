@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: column; /* Arrange items vertically */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
+    height: 100vh; /* Set the container height to full viewport height */
+}
+
+form {
+    width: 300px; /* Set the width of the form */
+}
+
+.button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #333333;
+    color: #00FF00;
+}

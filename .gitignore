@@ -1,0 +1,9 @@
+.idea
+misc.xml
+workspace.xml
+__pycache__
+.env
+*.log
+.vscode/*
+!.vscode/extensions.json
+credentials.*

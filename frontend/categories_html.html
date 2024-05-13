@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories and Topics</title>
+</head>
+<body>
+  <h1>Categories and Topics</h1>
+
+  <div id="categories">
+    <!-- Categories will be dynamically added here -->
+  </div>
+
+  <script>
+    // Function to get access token from server
+    async function getAccessToken(username, password) {
+      const response = await fetch('http://localhost:8000/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+      });
+      const data = await response.json();
+      return data.access_token;
+    }
+
+    // Function to fetch categories using access token
+    async function fetchCategories(token) {
+      const response = await fetch('http://localhost:8000/categories/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    }
+
+    // Main function to fetch categories
+    async function main() {
+      try {
+        // Check if access token is already stored in local storage
+        let token = localStorage.getItem('accessToken');
+        if (!token) {
+          // Replace 'user1' and 'password1' with actual credentials
+          token = await getAccessToken('user1', 'password1');
+          // Store access token in local storage
+          localStorage.setItem('accessToken', token);
+        }
+        // Fetch categories using access token
+        const categories = await fetchCategories(token);
+        // Display categories
+        const categoriesDiv = document.getElementById('categories');
+        categories.forEach(category => {
+          const categoryDiv = document.createElement('div');
+          categoryDiv.classList.add('category');
+          categoryDiv.innerHTML = `
+            <h2>${category.name}</h2>
+            <div class="topics">
+              ${category.topics.map(topic => `
+                <div class="topic">
+                  <h3>${topic.name}</h3>
+                  <p>${topic.description}</p>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          categoriesDiv.appendChild(categoryDiv);
+        });
+      } catch (error) {
+        console.error('There was a problem:', error);
+      }
+    }
+
+    // Call the main function
+    main();
+  </script>
+</body>
+</html>

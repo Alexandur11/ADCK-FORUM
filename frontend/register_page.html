@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        /* Basic styling for demonstration purposes */
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        label, input, select {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form id="registration-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" required>
+
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="e_mail" required>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="birth_date" required>
+
+        <input type="submit" value="Register">
+    </form>
+
+    <script>
+    document.getElementById('registration-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Serialize form data into JSON format
+        var formData = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+            firstname: document.getElementById('firstname').value,
+            lastname: document.getElementById('lastname').value,
+            e_mail: document.getElementById('email').value,
+            birth_date: document.getElementById('dob').value
+        };
+
+        // Send POST request with JSON data
+        fetch("http://127.0.0.1:8000/register/register_user", {
+            method: "POST",
+            headers: {
+                'Access-Control-Allow-Origin': 'http://127.0.0.1:8000',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            console.log(response);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Log response data
+            alert('User registered successfully!');
+            // Redirect to the login page
+            window.location.href = "Login_page.html"; // Change "login.html" to the path of your login page
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('Failed to register user. Please try again.');
+        });
+    });
+</script>
